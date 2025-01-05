@@ -43,6 +43,19 @@ resource "aws_api_gateway_method_response" "cors_response" {
   }
 }
 
+resource "aws_api_gateway_integration_response" "cors_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.STAT_API.id
+  resource_id = aws_api_gateway_resource.stocks_resource.id
+  http_method = aws_api_gateway_method.cors_options.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'*'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+}
+
 # Lambda Integration for GET /stocks
 resource "aws_api_gateway_method" "get_stocks" {
   rest_api_id   = aws_api_gateway_rest_api.STAT_API.id
@@ -58,6 +71,18 @@ resource "aws_api_gateway_integration" "lambda_get_integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.get_shortlisted_stocks.invoke_arn
+}
+
+resource "aws_api_gateway_integration_response" "lambda_get_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.STAT_API.id
+  resource_id = aws_api_gateway_resource.stocks_resource.id
+  http_method = aws_api_gateway_method.get_stocks.http_method
+  status_code = "200"
+  depends_on = [aws_api_gateway_integration.lambda_get_integration]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
 }
 
 # Lambda Integration for POST /shortlisted_stocks
@@ -77,6 +102,18 @@ resource "aws_api_gateway_integration" "lambda_post_integration" {
   uri                     = aws_lambda_function.create_shortlisted_stocks.invoke_arn
 }
 
+resource "aws_api_gateway_integration_response" "lambda_post_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.STAT_API.id
+  resource_id = aws_api_gateway_resource.stocks_resource.id
+  http_method = aws_api_gateway_method.post_stocks.http_method
+  status_code = "200"
+  depends_on = [aws_api_gateway_integration.lambda_post_integration]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+}
+
 # Lambda Integration for PUT /shortlisted_stocks
 resource "aws_api_gateway_method" "put_stocks" {
   rest_api_id   = aws_api_gateway_rest_api.STAT_API.id
@@ -94,6 +131,18 @@ resource "aws_api_gateway_integration" "lambda_put_integration" {
   uri                     = aws_lambda_function.update_shortlisted_stocks.invoke_arn
 }
 
+resource "aws_api_gateway_integration_response" "lambda_put_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.STAT_API.id
+  resource_id = aws_api_gateway_resource.stocks_resource.id
+  http_method = aws_api_gateway_method.put_stocks.http_method
+  status_code = "200"
+  depends_on = [aws_api_gateway_integration.lambda_put_integration]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+}
+
 # Lambda Integration for DELETE /shortlisted_stocks
 resource "aws_api_gateway_method" "delete_stocks" {
   rest_api_id   = aws_api_gateway_rest_api.STAT_API.id
@@ -109,6 +158,18 @@ resource "aws_api_gateway_integration" "lambda_delete_integration" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.delete_shortlisted_stocks.invoke_arn
+}
+
+resource "aws_api_gateway_integration_response" "lambda_delete_integration_response" {
+  rest_api_id = aws_api_gateway_rest_api.STAT_API.id
+  resource_id = aws_api_gateway_resource.stocks_resource.id
+  http_method = aws_api_gateway_method.delete_stocks.http_method
+  status_code = "200"
+  depends_on = [aws_api_gateway_integration.lambda_delete_integration]
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
 }
 
 # Lambda Permission to Allow API Gateway Invocation

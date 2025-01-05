@@ -47,11 +47,21 @@ def lambda_handler(event, context):
         # Serialize the response with Decimal handling
         return {
             'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT,DELETE'
+            },
             'body': json.dumps(selected_items, cls=DecimalEncoder)
         }
     
     except Exception as e:
         return {
             'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'OPTIONS,POST,GET,PUT,DELETE'
+            },
             'body': f"Error fetching records: {str(e)}"
         }

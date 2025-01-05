@@ -11,7 +11,7 @@ resource "aws_lambda_function" "get_shortlisted_stocks" {
   handler          = "lambda_function.lambda_handler"
   source_code_hash = data.archive_file.get_shortlisted_stocks.output_base64sha256
   runtime          = "python3.12"
-  timeout          = "15"
+  timeout          = "900"
   memory_size      = "128"
   environment {
     variables = {
@@ -33,7 +33,7 @@ resource "aws_lambda_function" "create_shortlisted_stocks" {
   handler          = "lambda_function.lambda_handler"
   source_code_hash = data.archive_file.create_shortlisted_stocks.output_base64sha256
   runtime          = "python3.12"
-  timeout          = "15"
+  timeout          = "900"
   memory_size      = "128"
   environment {
     variables = {
@@ -55,8 +55,9 @@ resource "aws_lambda_function" "update_shortlisted_stocks" {
   handler          = "lambda_function.lambda_handler"
   source_code_hash = data.archive_file.update_shortlisted_stocks.output_base64sha256
   runtime          = "python3.12"
-  timeout          = "15"
+  timeout          = "900"
   memory_size      = "128"
+  
   environment {
     variables = {
       TABLE_NAME = "Shortlisted_Stocks"
@@ -77,7 +78,7 @@ resource "aws_lambda_function" "delete_shortlisted_stocks" {
   handler          = "lambda_function.lambda_handler"
   source_code_hash = data.archive_file.delete_shortlisted_stocks.output_base64sha256
   runtime          = "python3.12"
-  timeout          = "15"
+  timeout          = "900"
   memory_size      = "128"
   environment {
     variables = {
